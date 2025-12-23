@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
-const { createHmac, randomBytes } = require("crypto");
+const bcrypt = require("bcrypt");
 
+// User Schema
 const userSchema = new Schema(
   {
     fullname: {
@@ -11,13 +12,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-    },
-    salt: {
-      type: String,
+      lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
       required: true,
+      minlength: 8,
     },
     profileImageURL: {
       type: String,
@@ -36,34 +37,20 @@ const userSchema = new Schema(
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
 
-  const salt = randomBytes(16).toString("hex");
-  const hashedPassword = createHmac("sha256", salt)
-    .update(this.password)
-    .digest("hex");
-
-  this.salt = salt;
-  this.password = hashedPassword;
+  const saltRounds = 12; // industry standard
+  this.password = await bcrypt.hash(this.password, saltRounds);
 });
 
 // Static method to match password
 userSchema.statics.matchPassword = async function (email, password) {
   const user = await this.findOne({ email });
-  if (!user || !user.salt) {
-    throw new Error("Invalid credentials");
-  }
+  if (!user) throw new Error("Invalid credentials");
 
-  const hashedInput = createHmac("sha256", user.salt)
-    .update(password)
-    .digest("hex");
-
-  if (hashedInput !== user.password) {
-    throw new Error("Invalid credentials");
-  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) throw new Error("Invalid credentials");
 
   const userObj = user.toObject();
   delete userObj.password;
-  delete userObj.salt;
-
   return userObj;
 };
 

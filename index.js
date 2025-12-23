@@ -1,27 +1,66 @@
-const path = require('path');
-const express = require('express');
-const mongoose = require('mongoose');
+require("dotenv").config();
 
-const userRouter = require('./routes/user');
+const path = require("path");
+const express = require("express");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+
+const userRouter = require("./routes/user");
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
-mongoose.connect('mongodb://localhost:27017/blog-app')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Could not connect to MongoDB...', err));
+/* ================= DATABASE ================= */
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB error:", err));
 
-app.set('view engine', 'ejs');
-app.set('views', path.resolve('./views'));
+/* ================= VIEW ENGINE ================= */
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
 
+/* ================= MIDDLEWARE ================= */
+app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.static(path.resolve("./public")));
 
-app.get('/', (req, res) => {    
-    res.render('home', { title: 'Home Page' });
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+  })
+);
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URL,
+    }),
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
+
+/* ================= ROUTES ================= */
+app.get("/", (req, res) => {
+  res.render("home", { title: "Home Page" });
 });
 
-app.use('/user', userRouter);
+app.use("/user", userRouter);
 
+/* ================= SERVER ================= */
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
