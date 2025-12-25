@@ -10,6 +10,11 @@
   <%- include('partials/nav') %>
 
   <div class="container mt-4">
+    <% if (error) { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+    <% } %>
     <form class="m-4" action="/user/signin" method="post">
       <div class="form-group mb-2">
         <label>Email address</label>
