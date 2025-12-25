@@ -9,6 +9,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
 const userRouter = require("./routes/user");
+const blogRouter = require("./routes/blog");
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -65,6 +66,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRouter);
+app.use("/blog", blogRouter);
 
 /* ================= SERVER ================= */
 app.listen(PORT, () => {
