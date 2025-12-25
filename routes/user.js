@@ -37,6 +37,7 @@ router.post("/signin", loginLimiter, async (req, res) => {
     req.session.user = {
       _id: user._id,
       role: user.role,
+      fullname: user.fullname,
     };
 
     res.redirect("/");

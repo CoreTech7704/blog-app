@@ -81,6 +81,7 @@ router.post(
       req.session.user = {
         _id: user._id,
         role: user.role,
+        fullname: user.fullname,
       };
 
       return res.json({

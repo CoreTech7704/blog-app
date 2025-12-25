@@ -12,29 +12,51 @@
 
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav me-auto">
-
       <li class="nav-item">
         <a class="nav-link" href="/">Home</a>
       </li>
 
       <% if (user) { %>
-        <li class="nav-item">
-          <a class="nav-link" href="/blog/new">Add Blog</a>
-        </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/blog/new">Add Blog</a>
+      </li>
 
-        <li class="nav-item">
-          <form action="/user/logout" method="POST" class="d-inline">
-            <button class="btn btn-link nav-link p-0 mt-2" type="submit">
-              Sign Out
-            </button>
-          </form>
-        </li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <%= user.fullname %>
+        </a>
+
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="navbarDropdown"
+        >
+          <li>
+            <a class="dropdown-item" href="/profile">Profile</a>
+          </li>
+
+          <li><hr class="dropdown-divider" /></li>
+
+          <li>
+            <form action="/user/logout" method="POST" class="px-3">
+              <button type="submit" class="btn btn-link dropdown-item">
+                Sign Out
+              </button>
+            </form>
+          </li>
+        </ul>
+      </li>
       <% } else { %>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/signin">Sign In</a>
-        </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/user/signin">Sign In</a>
+      </li>
       <% } %>
-
     </ul>
   </div>
 </nav>
