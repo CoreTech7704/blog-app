@@ -61,8 +61,18 @@ app.use((req, res, next) => {
 
 
 /* ================= ROUTES ================= */
-app.get("/", (req, res) => {
-  res.render("home", { title: "Home Page" });
+app.get("/", async (req, res) => {
+  try {
+    const blogs = await Blog.find({ published: true })
+      .populate("author", "fullname")
+      .sort({ createdAt: -1 })
+      .limit(6);
+
+    res.render("home", { blogs });
+  } catch (err) {
+    console.error(err);
+    res.render("home", { blogs: [] });
+  }
 });
 
 app.use("/user", userRouter);

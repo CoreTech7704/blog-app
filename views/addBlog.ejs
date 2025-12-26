@@ -10,11 +10,9 @@
     <div class="container mt-4">
       <div class="row justify-content-center">
         <div class="col-md-8">
-
           <h2 class="mb-4">Create New Blog</h2>
 
           <form action="/blog/new" method="POST" enctype="multipart/form-data">
-            
             <div class="mb-3">
               <label for="title" class="form-label">Blog Title*</label>
               <input
@@ -51,19 +49,38 @@
               ></textarea>
             </div>
 
-            <span class=""> Note: " * " fields are required</span>
-            <div class="d-flex gap-2">
-                
-              <button type="submit" class="btn btn-primary">
-                Publish
-              </button>
-              <a href="/" class="btn btn-outline-secondary">
-                Cancel
-              </a>
+            <div class="mb-3">
+              <label for="tags" class="form-label"
+                >Tags (comma separated)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="tags"
+                name="tags"
+                placeholder="e.g. technology, programming, web development"
+              />
             </div>
 
-          </form>
+            <div class="form-check mb-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="published"
+                name="published"
+                checked
+              />
+              <label class="form-check-label" for="published">
+                Publish immediately
+              </label>
+            </div>
 
+            <span class=""> Note: " * " fields are required</span>
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary">Publish</button>
+              <a href="/" class="btn btn-outline-secondary"> Cancel </a>
+            </div>
+          </form>
         </div>
       </div>
     </div>

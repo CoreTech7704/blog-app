@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Blog = require("../models/blog");
+const upload = require("../middleware/upload");
 
 const router = Router();
 
@@ -17,15 +18,26 @@ router.get("/new", requireAuth, (req, res) => {
 });
 
 /* ================= CREATE NEW BLOG ================= */
-router.post("/new", requireAuth, async (req, res) => {
+router.post("/new", requireAuth, upload.single("coverImage"), async (req, res) => {
   try {
     const { title, content } = req.body;
+
+    const published = req.body.published === "on";
+    const tagsArray = req.body.tags
+      ? req.body.tags.split(",").map((tag) => tag.trim())
+      : [];
+
+    const coverImageURL = req.file
+      ? `/uploads/blog/${req.file.filename}`
+      : undefined;
 
     const blog = await Blog.create({
       title,
       content,
+      tags: tagsArray,
+      coverImageURL,
       author: req.session.user._id,
-      // published defaults to false
+      published,
     });
 
     res.redirect(`/blog/${blog._id}`);
@@ -34,5 +46,31 @@ router.post("/new", requireAuth, async (req, res) => {
     res.redirect("/blog/new");
   }
 });
+
+/* ================= VIEW SINGLE BLOG ================= */
+router.get("/:id", async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id)
+      .populate("author", "fullname");
+
+    if (!blog) {
+      return res.status(404).render("404");
+    }
+
+    // If blog is not published, only author can view
+    if (!blog.published) {
+      if (!req.session.user || 
+          blog.author._id.toString() !== req.session.user._id) {
+        return res.status(403).send("Not authorized");
+      }
+    }
+
+    res.render("viewBlog", { blog });
+  } catch (err) {
+    console.error("Error fetching blog:", err);
+    res.status(400).send("Invalid blog ID");
+  }
+});
+
 
 module.exports = router;
