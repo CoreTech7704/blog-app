@@ -7,6 +7,8 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo").default;
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const userApiRoutes = require("./routes/api/user.api");
+
 
 const userRouter = require("./routes/user");
 const blogRouter = require("./routes/blog");
@@ -77,6 +79,7 @@ app.get("/", async (req, res) => {
 
 app.use("/user", userRouter);
 app.use("/blog", blogRouter);
+app.use("/api/user", userApiRoutes);
 
 /* ================= SERVER ================= */
 app.listen(PORT, () => {
