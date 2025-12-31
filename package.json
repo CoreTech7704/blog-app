@@ -1,9 +1,9 @@
 {
   "name": "blog-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "An open-source, developer-focused blogging platform built with Node.js, Express, MongoDB, and EJS.",
   "license": "ISC",
-  "author": "",
+  "author": "CoreTech7704(Sarvam Patel)",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
