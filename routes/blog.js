@@ -65,5 +65,54 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+/* ================= EDIT BLOG FORM ================= */
+router.get("/:id/edit", requireAuth, async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) return res.status(404).render("404");
+
+  if (blog.author.toString() !== req.session.user._id) {
+    return res.status(403).send("Not authorized");
+  }
+
+  res.render("editBlog", { blog });
+});
+
+/* ================= UPDATE BLOG ================= */
+router.put("/:id", requireAuth, upload.single("coverImage"), async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) return res.status(404).render("404");
+
+  if (blog.author.toString() !== req.session.user._id) {
+    return res.status(403).send("Not authorized");
+  }
+
+  blog.title = req.body.title;
+  blog.content = req.body.content;
+
+  if (req.file) {
+    blog.coverImageURL = `/uploads/blog/${req.file.filename}`;
+  }
+
+  await blog.save();
+
+  res.redirect(`/blog/${blog._id}`);
+});
+
+/* ================= DELETE BLOG ================= */
+router.delete("/:id", requireAuth, async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  if (!blog) return res.status(404).render("404");
+
+  if (blog.author.toString() !== req.session.user._id) {
+    return res.status(403).send("Not authorized");
+  }
+
+  await blog.deleteOne();
+
+  res.redirect("/");
+});
 
 module.exports = router;

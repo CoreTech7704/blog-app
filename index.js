@@ -8,6 +8,7 @@ const MongoStore = require("connect-mongo").default;
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const userApiRoutes = require("./routes/api/user.api");
+const methodOverride = require("method-override");
 
 const Blog = require("./models/blog");
 const userRouter = require("./routes/user");
@@ -31,6 +32,7 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(path.resolve("./public")));
+app.use(methodOverride("_method"));
 
 app.use(
   rateLimit({
