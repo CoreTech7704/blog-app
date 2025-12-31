@@ -1,10 +1,8 @@
 const { Router } = require("express");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/user");
-const rateLimit = require("express-rate-limit");
 const requireAuth = require("../middleware/requireAuth");
 const { loginLimiter, signupLimiter } = require("../middleware/rateLimit");
-
 const router = Router();
 
 /* ================= SIGN IN ================= */

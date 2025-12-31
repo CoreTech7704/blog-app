@@ -9,7 +9,7 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const userApiRoutes = require("./routes/api/user.api");
 
-
+const Blog = require("./models/blog");
 const userRouter = require("./routes/user");
 const blogRouter = require("./routes/blog");
 
