@@ -23,6 +23,9 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB error:", err));
 
+/* ================= EXPRESS SETTINGS ================= */
+app.set("trust proxy", 1);
+
 /* ================= VIEW ENGINE ================= */
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
