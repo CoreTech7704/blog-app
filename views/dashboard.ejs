@@ -22,7 +22,7 @@
       <!-- Stats summary -->
       <div class="row mb-4">
         <div class="col-md-4">
-          <div class="card border-0 shadow-sm">
+          <div class="card border-0 shadow">
             <div class="card-body text-center">
               <h5 class="mb-1"><%= stats.total %></h5>
               <p class="text-muted mb-0">Total Blogs</p>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="col-md-4">
-          <div class="card border-0 shadow-sm">
+          <div class="card border-0 shadow">
             <div class="card-body text-center">
               <h5 class="mb-1 text-success"><%= stats.published %></h5>
               <p class="text-muted mb-0">Published</p>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="col-md-4">
-          <div class="card border-0 shadow-sm">
+          <div class="card border-0 shadow">
             <div class="card-body text-center">
               <h5 class="mb-1 text-warning"><%= stats.drafts %></h5>
               <p class="text-muted mb-0">Drafts</p>
@@ -96,14 +96,14 @@
               <td class="text-end">
                 <a
                   href="/blog/<%= blog._id %>"
-                  class="btn btn-sm btn-outline-secondary"
+                  class="btn btn-sm btn-outline-secondary mb-2"
                 >
                   View
                 </a>
 
                 <a
                   href="/blog/<%= blog._id %>/edit"
-                  class="btn btn-sm btn-outline-primary"
+                  class="btn btn-sm btn-outline-primary mb-2"
                 >
                   Edit
                 </a>
@@ -111,7 +111,7 @@
                 <form
                   action="/blog/<%= blog._id %>/toggle-publish"
                   method="POST"
-                  class="d-inline"
+                  class="d-inline mb-2"
                 >
                   <% if (blog.published) { %>
                   <button class="btn btn-sm btn-outline-warning">
@@ -144,6 +144,5 @@
     </main>
 
     <%- include('./partials/footer') %> 
-    <%- include("./partials/scripts") %>
   </body>
 </html>

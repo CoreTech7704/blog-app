@@ -9,7 +9,7 @@
 
     <div class="container mt-4">
       <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-m-8">
           <h2 class="mb-4">Create New Blog</h2>
 
           <form action="/blog/new" method="POST" enctype="multipart/form-data">
@@ -76,7 +76,7 @@
             </div>
 
             <span class=""> Note: " * " fields are required</span>
-            <div class="d-flex gap-2 mb-3">
+            <div class="d-flex gap-2 mb-4">
               <button type="submit" class="btn btn-primary">Publish</button>
               <a href="/" class="btn btn-outline-secondary"> Cancel </a>
             </div>
@@ -86,6 +86,5 @@
     </div>
 
     <%- include('./partials/footer') %>
-    <%- include('./partials/scripts') %>
   </body>
 </html>
