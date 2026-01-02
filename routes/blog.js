@@ -40,6 +40,21 @@ router.post("/new", requireAuth, upload.single("coverImage"), async (req, res) =
   }
 });
 
+/* ================= LATEST BLOGS ================= */
+router.get("/latest", async (req, res) => {
+  try {
+    const blogs = await Blog.find({ published: true })
+      .populate("author", "fullname")
+      .sort({ createdAt: -1 })
+      .limit(12);
+
+    res.render("latest", { blogs });
+  } catch (err) {
+    console.error(err);
+    res.render("latest", { blogs: [] });
+  }
+});
+
 /* ================= VIEW SINGLE BLOG ================= */
 router.get("/:id", async (req, res) => {
   try {
